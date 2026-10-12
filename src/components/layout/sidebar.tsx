@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import {
   LayoutDashboard,
   FileText,
@@ -12,6 +13,7 @@ import {
   X,
   Receipt,
   CreditCard,
+  Globe,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useApp } from "@/context/app-context";
@@ -95,22 +97,25 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
         <div className="flex flex-col h-full">
           {/* Logo & Close Button */}
           <div className="flex items-center justify-between pb-7">
-            <button
-              onClick={() => handleSelectTab("overview")}
+            <Link
+              href="/"
               className="flex items-center gap-3 group text-left cursor-pointer"
+              title="Retour au site vitrine"
             >
               <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#0B8457] to-[#065F46] flex items-center justify-center text-white shadow-md shadow-emerald-900/10 group-hover:scale-105 transition-transform">
                 <Receipt className="w-5 h-5 text-white stroke-[2.2]" />
               </div>
               <div className="flex flex-col">
-                <span className="font-extrabold text-base tracking-tight text-slate-900 leading-none">
-                  GANN
-                </span>
+                <div className="flex items-center gap-1.5">
+                  <span className="font-extrabold text-base tracking-tight text-slate-900 leading-none">
+                    iziFacture
+                  </span>
+                </div>
                 <span className="text-[11px] font-semibold text-[#0B8457] tracking-widest uppercase mt-0.5">
-                  Facturation
+                  App SaaS
                 </span>
               </div>
-            </button>
+            </Link>
 
             {/* Mobile close button */}
             <button
@@ -189,6 +194,15 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                     </li>
                   );
                 })}
+                <li>
+                  <Link
+                    href="/"
+                    className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-2xl text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-all duration-150 cursor-pointer text-left"
+                  >
+                    <Globe className="w-4 h-4 shrink-0 text-slate-400" />
+                    <span>Site vitrine iziFacture</span>
+                  </Link>
+                </li>
               </ul>
             </div>
           </nav>

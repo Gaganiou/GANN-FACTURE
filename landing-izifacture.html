@@ -1,0 +1,1148 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>iziFacture — SaaS de facturation pour entrepreneurs africains</title>
+  <meta name="description" content="Créez vos factures conformes OHADA en 2 clics, calculez la TVA 18% automatiquement et encaissez vos paiements Wave, Orange Money et virements.">
+  
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary: #0B8457;
+      --primary-dark: #065F46;
+      --primary-light: #E8F5EE;
+      --text-main: #0F172A;
+      --text-muted: #64748B;
+      --bg-page: #F8FAFC;
+      --bg-card: #FFFFFF;
+      --border-color: rgba(226, 232, 240, 0.85);
+      --font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-family);
+      background-color: var(--bg-page);
+      color: var(--text-main);
+      line-height: 1.6;
+      overflow-x: hidden;
+      background-image: radial-gradient(rgba(11, 132, 87, 0.04) 1px, transparent 1px);
+      background-size: 28px 28px;
+    }
+
+    /* Container */
+    .container {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* Header & Navigation */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-color);
+      transition: all 0.2s ease;
+    }
+    .nav-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 80px;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--text-main);
+    }
+    .logo-icon {
+      width: 42px;
+      height: 42px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 20px;
+      box-shadow: 0 4px 14px rgba(11, 132, 87, 0.25);
+    }
+    .logo-text {
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+    .logo-text span {
+      color: var(--primary);
+    }
+    .logo-badge {
+      font-size: 10px;
+      background: var(--primary-light);
+      color: var(--primary);
+      padding: 2px 8px;
+      border-radius: 99px;
+      font-weight: 700;
+      margin-left: 6px;
+      vertical-align: middle;
+      border: 1px solid rgba(11, 132, 87, 0.2);
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+    nav a {
+      text-decoration: none;
+      color: var(--text-muted);
+      font-size: 14px;
+      font-weight: 600;
+      transition: color 0.15s ease;
+    }
+    nav a:hover {
+      color: var(--primary);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 24px;
+      border-radius: 99px;
+      font-size: 14px;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+      transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease, background-color 0.2s;
+    }
+    .btn:active {
+      transform: scale(0.96);
+    }
+    .btn-primary {
+      background-color: var(--primary);
+      color: #ffffff;
+      box-shadow: 0 4px 20px rgba(11, 132, 87, 0.28);
+    }
+    .btn-primary:hover {
+      background-color: #086b46;
+      box-shadow: 0 6px 24px rgba(11, 132, 87, 0.36);
+    }
+    .btn-secondary {
+      background-color: #ffffff;
+      color: var(--text-main);
+      border: 1px solid var(--border-color);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    }
+    .btn-secondary:hover {
+      background-color: #f1f5f9;
+    }
+    .btn-magnetic {
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Hero Section */
+    .hero {
+      padding: 64px 0 80px;
+      text-align: center;
+    }
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 16px;
+      border-radius: 99px;
+      background: var(--primary-light);
+      border: 1px solid rgba(11, 132, 87, 0.3);
+      color: var(--primary);
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 24px;
+    }
+    .pulse-dot {
+      width: 8px;
+      height: 8px;
+      background-color: var(--primary);
+      border-radius: 50%;
+      box-shadow: 0 0 0 4px rgba(11, 132, 87, 0.2);
+    }
+    .hero h1 {
+      font-size: clamp(36px, 5.5vw, 68px);
+      font-weight: 900;
+      line-height: 1.1;
+      letter-spacing: -1.5px;
+      max-width: 900px;
+      margin: 0 auto 20px;
+      color: #090e17;
+    }
+    .hero h1 span {
+      background: linear-gradient(135deg, var(--primary), #047857);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero-subtitle {
+      font-size: clamp(16px, 2vw, 19px);
+      color: var(--text-muted);
+      max-width: 680px;
+      margin: 0 auto 36px;
+      line-height: 1.6;
+    }
+    .hero-cta {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+    }
+    .hero-proof {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      flex-wrap: wrap;
+      font-size: 13px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+    .hero-proof span {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Mockup Display */
+    .mockup-wrapper {
+      margin-top: 56px;
+      position: relative;
+      max-width: 1020px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .mockup-frame {
+      background: rgba(255, 255, 255, 0.95);
+      border: 1px solid var(--border-color);
+      border-radius: 28px;
+      padding: 12px;
+      box-shadow: 0 25px 60px -15px rgba(15, 23, 42, 0.12);
+    }
+    .mockup-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 16px;
+      background: #f1f5f9;
+      border-radius: 18px 18px 0 0;
+      border-bottom: 1px solid var(--border-color);
+      font-size: 11px;
+      color: #94a3b8;
+    }
+    .mockup-dots {
+      display: flex;
+      gap: 6px;
+    }
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+    .dot-red { background: #f87171; }
+    .dot-yellow { background: #fbbf24; }
+    .dot-green { background: #34d399; }
+    .mockup-url {
+      background: #fff;
+      padding: 4px 16px;
+      border-radius: 99px;
+      border: 1px solid var(--border-color);
+      font-family: monospace;
+      color: #475569;
+    }
+    .mockup-content {
+      background: #F4F6F5;
+      padding: 28px;
+      border-radius: 0 0 18px 18px;
+      text-align: left;
+    }
+    .mockup-kpis {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .mockup-kpi-card {
+      background: #fff;
+      padding: 16px;
+      border-radius: 16px;
+      border: 1px solid var(--border-color);
+    }
+    .mockup-kpi-title {
+      font-size: 11px;
+      font-weight: 700;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .mockup-kpi-val {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--text-main);
+      margin-top: 4px;
+    }
+    .mockup-table {
+      background: #fff;
+      border-radius: 16px;
+      border: 1px solid var(--border-color);
+      overflow: hidden;
+    }
+    .mockup-table-header {
+      padding: 12px 18px;
+      background: #EBF5EF;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--primary-dark);
+      display: flex;
+      justify-content: space-between;
+    }
+    .mockup-table-row {
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #f1f5f9;
+      font-size: 13px;
+    }
+
+    /* Ribbon */
+    .ribbon {
+      margin-top: 64px;
+      padding-top: 32px;
+      border-top: 1px solid var(--border-color);
+      text-align: center;
+    }
+    .ribbon-title {
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: #94a3b8;
+      letter-spacing: 1px;
+      margin-bottom: 16px;
+    }
+    .ribbon-badges {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 32px;
+      flex-wrap: wrap;
+      font-weight: 800;
+      font-size: 16px;
+      color: #475569;
+    }
+
+    /* Section Problèmes (Dark contrast) */
+    .problem-section {
+      background: #090e17;
+      color: #ffffff;
+      padding: 96px 0;
+      position: relative;
+    }
+    .section-header {
+      text-align: center;
+      max-width: 720px;
+      margin: 0 auto 64px;
+    }
+    .section-badge {
+      display: inline-block;
+      padding: 4px 14px;
+      border-radius: 99px;
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 12px;
+    }
+    .badge-rose {
+      background: rgba(244, 63, 94, 0.15);
+      color: #fda4af;
+      border: 1px solid rgba(244, 63, 94, 0.3);
+    }
+    .badge-emerald {
+      background: var(--primary-light);
+      color: var(--primary);
+      border: 1px solid rgba(11, 132, 87, 0.3);
+    }
+    .section-title {
+      font-size: clamp(28px, 4vw, 44px);
+      font-weight: 900;
+      letter-spacing: -1px;
+      margin-bottom: 16px;
+      line-height: 1.2;
+    }
+    .section-subtitle {
+      font-size: 16px;
+      color: #94a3b8;
+    }
+
+    .problem-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+    }
+    .problem-card {
+      background: #111827;
+      border: 1px solid #1f2937;
+      border-radius: 24px;
+      padding: 32px;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+    .problem-card:hover {
+      transform: translateY(-4px);
+      border-color: #374151;
+    }
+    .card-icon-box {
+      width: 48px;
+      height: 48px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      margin-bottom: 20px;
+    }
+    .problem-card h3 {
+      font-size: 19px;
+      font-weight: 800;
+      margin-bottom: 12px;
+      color: #fff;
+    }
+    .problem-card p {
+      font-size: 14px;
+      color: #9ca3af;
+      line-height: 1.6;
+    }
+
+    /* Bento Grid (Fonctionnalités) */
+    .features-section {
+      padding: 100px 0;
+    }
+    .bento-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 24px;
+    }
+    .bento-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 24px;
+      padding: 32px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03);
+      display: flex;
+      flex-col: column;
+      justify-content: space-between;
+      transition: all 0.2s ease;
+    }
+    .bento-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06);
+    }
+    .bento-card h3 {
+      font-size: 18px;
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+    .bento-card p {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+    .bento-link {
+      margin-top: 20px;
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--primary);
+      text-decoration: none;
+    }
+
+    /* Comment ça marche */
+    .steps-section {
+      background: #f1f5f9;
+      padding: 90px 0;
+      border-top: 1px solid var(--border-color);
+      border-bottom: 1px solid var(--border-color);
+    }
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 28px;
+    }
+    .step-card {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: 24px;
+      padding: 36px;
+      position: relative;
+    }
+    .step-number {
+      font-size: 40px;
+      font-weight: 900;
+      color: rgba(11, 132, 87, 0.18);
+      font-family: monospace;
+      margin-bottom: 8px;
+    }
+    .step-card h3 {
+      font-size: 19px;
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+    .step-card p {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* Témoignages */
+    .testimonials-section {
+      padding: 100px 0;
+    }
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+    }
+    .testimonial-card {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: 24px;
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 20px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.02);
+    }
+    .stars {
+      color: #f59e0b;
+      font-size: 16px;
+      letter-spacing: 2px;
+    }
+    .testimonial-quote {
+      font-size: 14px;
+      font-style: italic;
+      color: #334155;
+      line-height: 1.6;
+    }
+    .author-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding-top: 16px;
+      border-top: 1px solid #f1f5f9;
+    }
+    .author-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--primary-light);
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 13px;
+    }
+    .author-name {
+      font-size: 14px;
+      font-weight: 800;
+    }
+    .author-role {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* Pricing Section */
+    .pricing-section {
+      background: #0f172a;
+      color: #ffffff;
+      padding: 100px 0;
+    }
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 28px;
+      align-items: stretch;
+    }
+    .pricing-card {
+      background: #090e17;
+      border: 1px solid #1e293b;
+      border-radius: 28px;
+      padding: 36px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 32px;
+      position: relative;
+    }
+    .pricing-featured {
+      border: 2px solid var(--primary);
+      background: linear-gradient(180deg, #131d31, #090e17);
+      box-shadow: 0 20px 40px rgba(11, 132, 87, 0.2);
+    }
+    .popular-tag {
+      position: absolute;
+      top: -14px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--primary);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 4px 14px;
+      border-radius: 99px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .plan-title {
+      font-size: 20px;
+      font-weight: 800;
+      margin-bottom: 6px;
+    }
+    .plan-desc {
+      font-size: 12px;
+      color: #94a3b8;
+    }
+    .plan-price {
+      margin: 20px 0;
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+    }
+    .price-amount {
+      font-size: 40px;
+      font-weight: 900;
+      color: #fff;
+    }
+    .pricing-featured .price-amount {
+      color: var(--primary);
+    }
+    .price-period {
+      font-size: 13px;
+      color: #94a3b8;
+    }
+    .plan-features {
+      list-style: none;
+      border-top: 1px solid #1e293b;
+      padding-top: 20px;
+    }
+    .plan-features li {
+      font-size: 13px;
+      color: #cbd5e1;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .check {
+      color: var(--primary);
+      font-weight: 900;
+    }
+
+    /* Final CTA */
+    .final-cta {
+      padding: 90px 0;
+    }
+    .cta-box {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      border-radius: 36px;
+      padding: 72px 32px;
+      text-align: center;
+      color: #ffffff;
+      box-shadow: 0 25px 50px -12px rgba(11, 132, 87, 0.35);
+    }
+    .cta-box h2 {
+      font-size: clamp(30px, 4.5vw, 48px);
+      font-weight: 900;
+      letter-spacing: -1px;
+      margin-bottom: 16px;
+    }
+    .cta-box p {
+      font-size: 16px;
+      color: #e2e8f0;
+      max-width: 600px;
+      margin: 0 auto 32px;
+    }
+
+    /* Footer */
+    footer {
+      background: #ffffff;
+      border-top: 1px solid var(--border-color);
+      padding: 48px 0;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    .footer-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 24px;
+    }
+    .footer-links {
+      display: flex;
+      gap: 24px;
+    }
+    .footer-links a {
+      text-decoration: none;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+    .footer-links a:hover {
+      color: var(--primary);
+    }
+    .africa-pride {
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      nav { display: none; }
+      .hero h1 { font-size: 34px; }
+      .footer-wrapper { flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==================== HEADER ==================== -->
+  <header>
+    <div class="container nav-wrapper">
+      <a href="/" class="logo">
+        <div class="logo-icon">🧾</div>
+        <div class="logo-text">izi<span>Facture</span><span class="logo-badge">Afrique 🌍</span></div>
+      </a>
+
+      <nav>
+        <a href="#problemes">Problèmes</a>
+        <a href="#fonctionnalites">Fonctionnalités</a>
+        <a href="#comment-ca-marche">Comment ça marche</a>
+        <a href="#tarifs">Tarifs</a>
+        <a href="#temoignages">Avis</a>
+      </nav>
+
+      <div class="nav-actions">
+        <a href="/dashboard" class="btn btn-secondary">Se connecter</a>
+        <a href="/dashboard" class="btn btn-primary btn-magnetic">Commencer gratuitement →</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== HERO SECTION ==================== -->
+  <section class="hero container">
+    <div class="badge-pill">
+      <span class="pulse-dot"></span>
+      La facturation nouvelle génération pour les entrepreneurs africains
+    </div>
+
+    <h1>Fini les factures sur Word & Excel.<br><span>Facturez comme un grand compte.</span></h1>
+
+    <p class="hero-subtitle">
+      Créez des factures 100% conformes aux normes OHADA en 2 clics, calculez la TVA 18% automatiquement et encaissez vos paiements Wave, Orange Money et virements sans friction.
+    </p>
+
+    <div class="hero-cta">
+      <a href="/dashboard" class="btn btn-primary btn-magnetic" style="padding: 16px 36px; font-size: 15px;">
+        Commencer gratuitement (0 FCFA) →
+      </a>
+      <a href="/dashboard" class="btn btn-secondary" style="padding: 16px 28px; font-size: 15px;">
+        ▶ Voir la démo en direct
+      </a>
+    </div>
+
+    <div class="hero-proof">
+      <span>✓ Aucune carte bancaire requise</span>
+      <span>✓ Conforme SYSCOHADA & UEMOA</span>
+      <span>✓ Prêt en 60 secondes</span>
+    </div>
+
+    <!-- Mockup Dashboard -->
+    <div class="mockup-wrapper">
+      <div class="mockup-frame">
+        <div class="mockup-bar">
+          <div class="mockup-dots">
+            <span class="dot dot-red"></span>
+            <span class="dot dot-yellow"></span>
+            <span class="dot dot-green"></span>
+          </div>
+          <div class="mockup-url">https://app.izifacture.com/dashboard</div>
+          <div></div>
+        </div>
+
+        <div class="mockup-content">
+          <div class="mockup-kpis">
+            <div class="mockup-kpi-card">
+              <div class="mockup-kpi-title">Montant Facturé</div>
+              <div class="mockup-kpi-val">28 450 000 FCFA</div>
+            </div>
+            <div class="mockup-kpi-card">
+              <div class="mockup-kpi-title" style="color: var(--primary);">Encaissé (Wave / Virement)</div>
+              <div class="mockup-kpi-val" style="color: var(--primary);">21 650 000 FCFA</div>
+            </div>
+            <div class="mockup-kpi-card">
+              <div class="mockup-kpi-title" style="color: #d97706;">En Attente</div>
+              <div class="mockup-kpi-val" style="color: #d97706;">6 800 000 FCFA</div>
+            </div>
+          </div>
+
+          <div class="mockup-table">
+            <div class="mockup-table-header">
+              <span>Factures Récentes</span>
+              <span>Normes OHADA Certifiées</span>
+            </div>
+            <div class="mockup-table-row">
+              <div>
+                <strong>FAC-2026-0042 • Sahel Distribution SA</strong>
+                <div style="font-size: 11px; color: #64748b;">Refonte plateforme & API • Abidjan</div>
+              </div>
+              <div style="text-align: right;">
+                <strong style="color: var(--primary); font-size: 15px;">+ 4 750 000 FCFA</strong>
+                <div style="font-size: 11px; color: #0284c7; font-weight: 700;">Payé via Wave</div>
+              </div>
+            </div>
+            <div class="mockup-table-row">
+              <div>
+                <strong>FAC-2026-0040 • Teranga Logistique</strong>
+                <div style="font-size: 11px; color: #64748b;">Audit sécurité Cloud • Dakar</div>
+              </div>
+              <div style="text-align: right;">
+                <strong style="color: var(--primary); font-size: 15px;">+ 8 200 000 FCFA</strong>
+                <div style="font-size: 11px; color: #7c3aed; font-weight: 700;">Virement bancaire</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ribbon -->
+    <div class="ribbon">
+      <div class="ribbon-title">Encaissez par tous les moyens utilisés par vos clients</div>
+      <div class="ribbon-badges">
+        <span>Wave 📱</span>
+        <span>Orange Money 🟠</span>
+        <span>MTN MoMo 🟡</span>
+        <span>Moov Money 🔵</span>
+        <span>Virements Bancaires UEMOA 🏦</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SECTION PROBLÈME ==================== -->
+  <section id="problemes" class="problem-section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-badge badge-rose">La réalité du terrain</span>
+        <h2 class="section-title">Pourquoi la gestion de facturation fait perdre des millions aux entrepreneurs ?</h2>
+        <p class="section-subtitle">Créer une facture ne devrait pas être un cauchemar entre fichiers Word corrompus et SMS de relance gênants.</p>
+      </div>
+
+      <div class="problem-grid">
+        <div class="problem-card">
+          <div class="card-icon-box" style="background: rgba(244, 63, 94, 0.15); color: #f43f5e;">📄</div>
+          <h3>Factures Word & Excel bricolées</h3>
+          <p>Mises en page cassées, copier-coller d'anciens devis avec le nom d'un autre client, aucun NIF... Vos clients doutent de votre crédibilité et retardent leurs règlements.</p>
+        </div>
+
+        <div class="problem-card">
+          <div class="card-icon-box" style="background: rgba(245, 158, 11, 0.15); color: #f59e0b;">🧮</div>
+          <h3>Calculs manuels de TVA 18% & Erreurs fiscales</h3>
+          <p>TVA mal ventilée, arrondi bancal entre HT et TTC, sanctions lors des déclarations comptables... Vous perdez du temps précieux avec une calculatrice au lieu de vendre.</p>
+        </div>
+
+        <div class="problem-card">
+          <div class="card-icon-box" style="background: rgba(168, 85, 247, 0.15); color: #a855f7;">⏳</div>
+          <h3>Suivi des impayés quasi impossible</h3>
+          <p>Qui a payé ? Qui est en retard de 30 jours ? Les notifications de Mobile Money se noient dans vos SMS personnels et des factures entières restent impayées sans trace.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SECTION FONCTIONNALITÉS ==================== -->
+  <section id="fonctionnalites" class="features-section container">
+    <div class="section-header">
+      <span class="section-badge badge-emerald">Conçu pour vous</span>
+      <h2 class="section-title">Toutes les fonctionnalités indispensables pour facturer comme un pro</h2>
+      <p class="section-subtitle">Une interface intuitive pensée spécialement pour les devises FCFA et les entreprises africaines.</p>
+    </div>
+
+    <div class="bento-grid">
+      <div class="bento-card">
+        <div>
+          <div class="card-icon-box" style="background: var(--primary-light); color: var(--primary);">⚡</div>
+          <h3>Factures pro en 2 clics</h3>
+          <p>Sélectionnez votre client, saisissez vos prestations, et téléchargez un PDF impeccable avec votre logo, NIF et RCCM.</p>
+        </div>
+        <a href="/dashboard" class="bento-link">Format légal OHADA →</a>
+      </div>
+
+      <div class="bento-card">
+        <div>
+          <div class="card-icon-box" style="background: #fef3c7; color: #d97706;">🛡️</div>
+          <h3>TVA 18% automatique</h3>
+          <p>Calcul en direct du sous-total HT, de la taxe sur la valeur ajoutée et du net à payer TTC en FCFA sans risque d'erreur.</p>
+        </div>
+        <a href="/dashboard" class="bento-link">Zéro calcul mental →</a>
+      </div>
+
+      <div class="bento-card">
+        <div>
+          <div class="card-icon-box" style="background: #e0f2fe; color: #0284c7;">💳</div>
+          <h3>Suivi paiements en temps réel</h3>
+          <p>Suivez qui a payé et qui est en retard. Enregistrez les règlements Wave, Orange Money et virements avec références.</p>
+        </div>
+        <a href="/dashboard" class="bento-link">Trésorerie limpide →</a>
+      </div>
+
+      <div class="bento-card">
+        <div>
+          <div class="card-icon-box" style="background: #f3e8ff; color: #7e22ce;">👥</div>
+          <h3>Gestion clients intégrée</h3>
+          <p>Carnet d'adresses centralisé, historique des factures par client, chiffre d'affaires cumulé et contact WhatsApp direct.</p>
+        </div>
+        <a href="/dashboard" class="bento-link">Fidélisation simplifiée →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SECTION COMMENT ÇA MARCHE ==================== -->
+  <section id="comment-ca-marche" class="steps-section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-badge badge-emerald">En 3 étapes</span>
+        <h2 class="section-title">Comment ça marche ?</h2>
+        <p class="section-subtitle">Prenez en main votre facturation en moins de 3 minutes chrono.</p>
+      </div>
+
+      <div class="steps-grid">
+        <div class="step-card">
+          <div class="step-number">01</div>
+          <h3>Inscrivez votre entreprise</h3>
+          <p>Renseignez votre raison sociale, NIF, RCCM et vos coordonnées Mobile Money (Wave, Orange, MTN). Vos coordonnées apparaîtront sur chaque facture.</p>
+        </div>
+
+        <div class="step-card">
+          <div class="step-number">02</div>
+          <h3>Créez votre première facture</h3>
+          <p>Sélectionnez votre client ou ajoutez-le en direct, listez vos prestations : le sous-total, la TVA 18% et le total TTC se calculent automatiquement.</p>
+        </div>
+
+        <div class="step-card">
+          <div class="step-number">03</div>
+          <h3>Envoyez et encaissez</h3>
+          <p>Téléchargez le PDF ou envoyez-le par WhatsApp/Email. Dès que votre client effectue le virement ou le paiement Wave, marquez-la comme payée.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SECTION TÉMOIGNAGES ==================== -->
+  <section id="temoignages" class="testimonials-section container">
+    <div class="section-header">
+      <span class="section-badge badge-emerald">Ils nous font confiance</span>
+      <h2 class="section-title">Ce que disent les entrepreneurs africains</h2>
+      <p class="section-subtitle">Découvrez comment iziFacture transforme le quotidien des agences et consultants.</p>
+    </div>
+
+    <div class="testimonials-grid">
+      <div class="testimonial-card">
+        <div>
+          <div class="stars">★★★★★</div>
+          <p class="testimonial-quote">« Nos clients règlent désormais en 4 jours en moyenne. Le fait d'avoir nos numéros marchands Wave et Orange Money directement indiqués sur la facture pro a changé notre trésorerie. »</p>
+        </div>
+        <div class="author-info">
+          <div class="author-avatar">IT</div>
+          <div>
+            <div class="author-name">Ibrahim Traoré</div>
+            <div class="author-role">DG Agence Web • Abidjan, Côte d'Ivoire</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial-card">
+        <div>
+          <div class="stars">★★★★★</div>
+          <p class="testimonial-quote">« Fini les calculs d'apothicaire sur Excel avec la TVA 18% ! Mon comptable à Dakar est ravi et mes clients institutionnels apprécient la présentation conforme OHADA. »</p>
+        </div>
+        <div class="author-info">
+          <div class="author-avatar" style="background: #fef3c7; color: #b45309;">FB</div>
+          <div>
+            <div class="author-name">Fatou Bamba</div>
+            <div class="author-role">Fondatrice Cosmétiques • Dakar, Sénégal</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial-card">
+        <div>
+          <div class="stars">★★★★★</div>
+          <p class="testimonial-quote">« C'est le seul logiciel qui a compris le marché africain : simple, rapide, en FCFA, sans fioritures inutiles. Je gère plus de 20 millions de FCFA de factures mensuelles avec. »</p>
+        </div>
+        <div class="author-info">
+          <div class="author-avatar" style="background: #f3e8ff; color: #7e22ce;">JM</div>
+          <div>
+            <div class="author-name">Jean-Marc Kamga</div>
+            <div class="author-role">Consultant Logistique • Douala, Cameroun</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SECTION TARIFICATION ==================== -->
+  <section id="tarifs" class="pricing-section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-badge" style="background: rgba(11, 132, 87, 0.25); color: #6ee7b7; border: 1px solid rgba(11, 132, 87, 0.4);">Des tarifs clairs en FCFA</span>
+        <h2 class="section-title">Investissez dans la clarté de votre trésorerie</h2>
+        <p class="section-subtitle">Commencez gratuitement et faites évoluer votre formule selon vos besoins.</p>
+      </div>
+
+      <div class="pricing-grid">
+        <!-- Plan Gratuit -->
+        <div class="pricing-card">
+          <div>
+            <div class="plan-title">Plan Gratuit</div>
+            <div class="plan-desc">Pour tester et démarrer sans frais</div>
+            <div class="plan-price">
+              <span class="price-amount">0</span>
+              <span class="price-period">FCFA / mois</span>
+            </div>
+            <ul class="plan-features">
+              <li><span class="check">✓</span> Jusqu'à 5 factures par mois</li>
+              <li><span class="check">✓</span> 1 utilisateur</li>
+              <li><span class="check">✓</span> Format légal OHADA</li>
+              <li style="color: #64748b;">✕ Export CSV / Comptable</li>
+            </ul>
+          </div>
+          <a href="/dashboard" class="btn btn-secondary" style="width: 100%;">Commencer gratuitement</a>
+        </div>
+
+        <!-- Plan Pro (MIS EN AVANT) -->
+        <div class="pricing-card pricing-featured">
+          <div class="popular-tag">⭐ Le plus populaire</div>
+          <div>
+            <div class="plan-title">Plan Pro</div>
+            <div class="plan-desc" style="color: #6ee7b7;">Pour indépendants, agences & consultants</div>
+            <div class="plan-price">
+              <span class="price-amount">5 000</span>
+              <span class="price-period">FCFA / mois</span>
+            </div>
+            <ul class="plan-features">
+              <li><span class="check">✓</span> Factures & Devis <strong>illimités</strong></li>
+              <li><span class="check">✓</span> Calcul automatique TVA 18% & TTC</li>
+              <li><span class="check">✓</span> Suivi règlements Wave / Orange / Banques</li>
+              <li><span class="check">✓</span> Export CSV compatible Sage & Excel</li>
+              <li><span class="check">✓</span> Logo, NIF & cachet personnalisé</li>
+              <li><span class="check">✓</span> Support prioritaire WhatsApp 7j/7</li>
+            </ul>
+          </div>
+          <a href="/dashboard" class="btn btn-primary btn-magnetic" style="width: 100%; padding: 16px;">Passer au Plan Pro →</a>
+        </div>
+
+        <!-- Plan Business -->
+        <div class="pricing-card">
+          <div>
+            <div class="plan-title">Plan Business</div>
+            <div class="plan-desc">Pour les PME et équipes en croissance</div>
+            <div class="plan-price">
+              <span class="price-amount">15 000</span>
+              <span class="price-period">FCFA / mois</span>
+            </div>
+            <ul class="plan-features">
+              <li><span class="check">✓</span> Tout le Plan Pro inclus</li>
+              <li><span class="check">✓</span> Multi-utilisateurs (comptable, associés)</li>
+              <li><span class="check">✓</span> Gestion multi-entreprises</li>
+              <li><span class="check">✓</span> Rapports comptables annuels avancés</li>
+            </ul>
+          </div>
+          <a href="/dashboard" class="btn btn-secondary" style="width: 100%;">Contacter l'équipe</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SECTION CTA FINAL ==================== -->
+  <section class="final-cta container">
+    <div class="cta-box">
+      <h2>Rejoins les entrepreneurs qui facturent comme des pros.</h2>
+      <p>Ne laissez plus vos devis et factures freiner la croissance de votre entreprise. Ouvrez votre compte en 60 secondes.</p>
+      <a href="/dashboard" class="btn btn-secondary" style="padding: 16px 36px; font-size: 15px; color: var(--primary-dark); font-weight: 800;">
+        Commencer gratuitement dès aujourd'hui →
+      </a>
+    </div>
+  </section>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer>
+    <div class="container footer-wrapper">
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <div class="logo-icon" style="width: 34px; height: 34px; font-size: 16px;">🧾</div>
+        <div>
+          <strong style="color: var(--text-main); font-size: 16px;">izi<span style="color: var(--primary);">Facture</span></strong>
+          <div style="font-size: 11px; color: #94a3b8;">Logiciel de facturation SaaS pour l'Afrique</div>
+        </div>
+      </div>
+
+      <div class="footer-links">
+        <a href="#fonctionnalites">Fonctionnalités</a>
+        <a href="#tarifs">Tarifs</a>
+        <a href="/dashboard">Espace Application</a>
+        <a href="mailto:contact@izifacture.com">Contact</a>
+      </div>
+
+      <div>
+        <div class="africa-pride">Fait avec fierté en Afrique 🌍</div>
+        <div style="font-size: 11px; margin-top: 4px;">© 2026 iziFacture. Tous droits réservés.</div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Magnetic Button Micro-Interaction JS -->
+  <script>
+    document.querySelectorAll('.btn-magnetic').forEach(btn => {
+      btn.addEventListener('mousemove', (e) => {
+        const rect = btn.getBoundingClientRect();
+        const x = e.clientX - rect.left - rect.width / 2;
+        const y = e.clientY - rect.top - rect.height / 2;
+        btn.style.transform = `translate(${x * 0.15}px, ${y * 0.15}px)`;
+      });
+      btn.addEventListener('mouseleave', () => {
+        btn.style.transform = 'translate(0px, 0px)';
+      });
+    });
+  </script>
+</body>
+</html>
