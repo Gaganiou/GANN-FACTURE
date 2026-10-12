@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import Link from "next/link";
 import {
   Search,
   Plus,
@@ -9,8 +10,13 @@ import {
   Menu,
   Check,
   CheckCircle2,
+  LogOut,
+  Globe,
+  Building,
+  Sparkles,
 } from "lucide-react";
 import { useApp } from "@/context/app-context";
+import { useAuth } from "@/context/auth-context";
 
 interface HeaderProps {
   onOpenMobileMenu: () => void;
@@ -29,6 +35,18 @@ export function Header({ onOpenMobileMenu }: HeaderProps) {
   const [showUserDropdown, setShowUserDropdown] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const [unreadCount, setUnreadCount] = useState(2);
+
+  const { user, isDemo, signOut } = useAuth();
+  const rawName = user?.user_metadata?.name || (isDemo ? "Utilisateur Démo" : (user?.email?.split("@")[0] || "Entrepreneur"));
+  const initials = rawName
+    .split(" ")
+    .filter(Boolean)
+    .map((n: string) => n[0])
+    .join("")
+    .toUpperCase()
+    .slice(0, 2) || "IF";
+  const displayEmail = user?.email || (isDemo ? "demo@izifacture.com" : "");
+  const displayCompany = user?.user_metadata?.company || (isDemo ? "Africa Business Démo" : "Africa Digital Hub SARL");
 
   const getPageInfo = () => {
     switch (activeTab) {
@@ -175,15 +193,15 @@ export function Header({ onOpenMobileMenu }: HeaderProps) {
               onClick={() => setShowUserDropdown(!showUserDropdown)}
               className="flex items-center gap-2 sm:gap-2.5 pl-1.5 pr-2.5 py-1 rounded-full bg-white border border-slate-200/90 hover:border-slate-300 shadow-2xs transition-all text-left cursor-pointer"
             >
-              <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#E8E2FA] text-[#553C9A] flex items-center justify-center font-bold text-xs shrink-0">
-                AD
+              <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-emerald-100 text-[#0B8457] flex items-center justify-center font-bold text-xs shrink-0">
+                {initials}
               </div>
               <div className="hidden sm:flex flex-col">
                 <span className="text-xs font-semibold text-slate-900 leading-tight">
-                  Amadou Diallo
+                  {rawName}
                 </span>
-                <span className="text-[10px] text-slate-400 font-normal leading-tight">
-                  amadou@africabiz.sn
+                <span className="text-[10px] text-slate-400 font-normal leading-tight truncate max-w-[120px]">
+                  {displayEmail}
                 </span>
               </div>
               <ChevronDown className="w-3.5 h-3.5 text-slate-400 ml-0.5" />
@@ -191,14 +209,34 @@ export function Header({ onOpenMobileMenu }: HeaderProps) {
 
             {/* Profile Dropdown */}
             {showUserDropdown && (
-              <div className="absolute right-0 mt-2 w-56 bg-white rounded-2xl shadow-xl border border-slate-100 p-2 z-50 animate-in fade-in zoom-in-95">
+              <div className="absolute right-0 mt-2 w-64 bg-white rounded-2xl shadow-xl border border-slate-100 p-2 z-50 animate-in fade-in zoom-in-95">
                 <div className="px-3 py-2 border-b border-slate-100 mb-1">
-                  <p className="text-xs font-bold text-slate-900">Amadou Diallo</p>
-                  <p className="text-[11px] text-slate-400">Africa Digital Hub SARL</p>
-                  <span className="inline-block mt-1 text-[10px] bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full font-semibold">
-                    Plan Entreprise Pro • FCFA
+                  <p className="text-xs font-bold text-slate-900">{rawName}</p>
+                  <p className="text-[11px] text-slate-400 truncate">{displayCompany}</p>
+                  <span className="inline-flex items-center gap-1 mt-1 text-[10px] bg-emerald-50 text-[#0B8457] border border-emerald-200/80 px-2 py-0.5 rounded-full font-bold">
+                    {isDemo ? (
+                      <>
+                        <Sparkles className="w-3 h-3 text-amber-500" />
+                        <span>Mode Démo (Aperçu)</span>
+                      </>
+                    ) : (
+                      <>
+                        <CheckCircle2 className="w-3 h-3 text-[#0B8457]" />
+                        <span>Compte Actif • Supabase</span>
+                      </>
+                    )}
                   </span>
                 </div>
+
+                <Link
+                  href="/"
+                  onClick={() => setShowUserDropdown(false)}
+                  className="w-full flex items-center gap-2.5 px-3 py-2 text-xs rounded-xl text-slate-700 hover:bg-slate-50 transition-colors text-left cursor-pointer"
+                >
+                  <Globe className="w-4 h-4 text-slate-400" />
+                  <span>Site vitrine (Accueil)</span>
+                </Link>
+
                 <button
                   onClick={() => {
                     setShowUserDropdown(false);
@@ -208,24 +246,27 @@ export function Header({ onOpenMobileMenu }: HeaderProps) {
                 >
                   <span>Paramètres du compte</span>
                 </button>
+
                 <button
                   onClick={() => {
                     setShowUserDropdown(false);
-                    showToast("Mode multi-entreprise : Espace Côte d'Ivoire & Sénégal synchronisé", "info");
+                    showToast("Mode multi-entreprise : Espace synchronisé", "info");
                   }}
                   className="w-full flex items-center justify-between px-3 py-2 text-xs rounded-xl text-slate-700 hover:bg-slate-50 transition-colors text-left cursor-pointer"
                 >
                   <span>Changer d'entreprise</span>
                 </button>
+
                 <div className="pt-1 border-t border-slate-100 mt-1">
                   <button
-                    onClick={() => {
+                    onClick={async () => {
                       setShowUserDropdown(false);
-                      showToast("Session locale active. Données sauvegardées.", "info");
+                      await signOut();
                     }}
-                    className="w-full flex items-center px-3 py-2 text-xs rounded-xl text-slate-600 hover:bg-slate-50 transition-colors text-left font-medium cursor-pointer"
+                    className="w-full flex items-center gap-2 px-3 py-2 text-xs rounded-xl text-rose-600 hover:bg-rose-50 transition-colors text-left font-bold cursor-pointer"
                   >
-                    Statut de connexion
+                    <LogOut className="w-4 h-4" />
+                    <span>Se déconnecter</span>
                   </button>
                 </div>
               </div>

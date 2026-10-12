@@ -15,6 +15,7 @@ import {
   calculateStats,
   exportInvoicesToCSV,
 } from "@/data/mock-data";
+import { useAuth } from "@/context/auth-context";
 
 interface ToastMessage {
   id: string;
@@ -67,10 +68,16 @@ interface AppContextType {
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export function AppProvider({ children }: { children: React.ReactNode }) {
-  const [invoices, setInvoices] = useState<Invoice[]>(MOCK_INVOICES);
-  const [clients, setClients] = useState<Client[]>(MOCK_CLIENTS);
-  const [payments, setPayments] = useState<Payment[]>(MOCK_PAYMENTS);
-  const [settings, setSettings] = useState<CompanySettings>(DEFAULT_SETTINGS);
+  const { user, isDemo } = useAuth();
+
+  const [invoices, setInvoices] = useState<Invoice[]>(isDemo ? MOCK_INVOICES : []);
+  const [clients, setClients] = useState<Client[]>(isDemo ? MOCK_CLIENTS : []);
+  const [payments, setPayments] = useState<Payment[]>(isDemo ? MOCK_PAYMENTS : []);
+  const [settings, setSettings] = useState<CompanySettings>(() => ({
+    ...DEFAULT_SETTINGS,
+    companyName: user?.user_metadata?.company || DEFAULT_SETTINGS.companyName,
+    email: user?.email || DEFAULT_SETTINGS.email,
+  }));
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const [activeTab, setActiveTab] = useState<string>("overview");
@@ -94,17 +101,39 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   // Chargement initial depuis Supabase
   useEffect(() => {
     async function loadDataFromSupabase() {
+      // Si on est en mode Démo, on utilise directement les données de démonstration locales
+      if (isDemo) {
+        setInvoices(MOCK_INVOICES);
+        setClients(MOCK_CLIENTS);
+        setPayments(MOCK_PAYMENTS);
+        setSettings(DEFAULT_SETTINGS);
+        setIsLoading(false);
+        return;
+      }
+
       try {
         setIsLoading(true);
 
+        let clientsReq = supabase.from("clients").select("*").order("created_at", { ascending: false });
+        let invoicesReq = supabase.from("invoices").select("*").order("issue_date", { ascending: false });
+        let paymentsReq = supabase.from("payments").select("*").order("payment_date", { ascending: false });
+        let settingsReq = supabase.from("company_settings").select("*");
+
+        if (user) {
+          clientsReq = clientsReq.eq("user_id", user.id);
+          invoicesReq = invoicesReq.eq("user_id", user.id);
+          paymentsReq = paymentsReq.eq("user_id", user.id);
+          settingsReq = settingsReq.eq("user_id", user.id);
+        }
+
         const [resClients, resInvoices, resPayments, resSettings] = await Promise.all([
-          supabase.from("clients").select("*").order("created_at", { ascending: false }),
-          supabase.from("invoices").select("*").order("issue_date", { ascending: false }),
-          supabase.from("payments").select("*").order("payment_date", { ascending: false }),
-          supabase.from("company_settings").select("*").eq("id", "default").maybeSingle(),
+          clientsReq,
+          invoicesReq,
+          paymentsReq,
+          settingsReq.maybeSingle(),
         ]);
 
-        if (resClients.data && resClients.data.length > 0) {
+        if (resClients.data) {
           setClients(
             resClients.data.map((c: any) => ({
               id: c.id,
@@ -123,7 +152,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
           );
         }
 
-        if (resInvoices.data && resInvoices.data.length > 0) {
+        if (resInvoices.data) {
           setInvoices(
             resInvoices.data.map((i: any) => ({
               id: i.id,
@@ -148,7 +177,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
           );
         }
 
-        if (resPayments.data && resPayments.data.length > 0) {
+        if (resPayments.data) {
           setPayments(
             resPayments.data.map((p: any) => ({
               id: p.id,
@@ -168,9 +197,9 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         if (resSettings.data) {
           const s = resSettings.data;
           setSettings({
-            companyName: s.company_name || DEFAULT_SETTINGS.companyName,
+            companyName: s.company_name || user?.user_metadata?.company || DEFAULT_SETTINGS.companyName,
             nifRccm: s.nif_rccm || DEFAULT_SETTINGS.nifRccm,
-            email: s.email || DEFAULT_SETTINGS.email,
+            email: s.email || user?.email || DEFAULT_SETTINGS.email,
             phone: s.phone || DEFAULT_SETTINGS.phone,
             address: s.address || DEFAULT_SETTINGS.address,
             city: s.city || DEFAULT_SETTINGS.city,
@@ -194,7 +223,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     }
 
     loadDataFromSupabase();
-  }, []);
+  }, [user, isDemo]);
 
   const stats = calculateStats(invoices);
 
@@ -208,6 +237,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     try {
       const { error } = await supabase.from("invoices").insert({
         id: newInv.id,
+        user_id: user?.id || null,
         invoice_number: newInv.invoiceNumber,
         description: newInv.description,
         client_name: newInv.client.name,
@@ -339,6 +369,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     try {
       await supabase.from("clients").insert({
         id: cli.id,
+        user_id: user?.id || null,
         name: cli.name,
         company: cli.company,
         email: cli.email,
@@ -393,6 +424,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     try {
       await supabase.from("payments").insert({
         id: pay.id,
+        user_id: user?.id || null,
         invoice_id: pay.invoiceId,
         invoice_number: pay.invoiceNumber,
         client_name: pay.clientName,
@@ -422,7 +454,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
     try {
       await supabase.from("company_settings").upsert({
-        id: "default",
+        id: user?.id ? `user-${user.id}` : "default",
+        user_id: user?.id || null,
         company_name: newSettings.companyName,
         nif_rccm: newSettings.nifRccm,
         email: newSettings.email,

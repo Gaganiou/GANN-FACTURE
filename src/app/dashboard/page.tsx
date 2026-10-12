@@ -1,6 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/auth-context";
 import { AppProvider, useApp } from "@/context/app-context";
 import { Sidebar } from "@/components/layout/sidebar";
 import { Header } from "@/components/layout/header";
@@ -20,6 +22,7 @@ import { CreateClientModal } from "@/components/dashboard/create-client-modal";
 import { RecordPaymentModal } from "@/components/dashboard/record-payment-modal";
 import { InvoiceDetailModal } from "@/components/dashboard/invoice-detail-modal";
 import { ToastNotification } from "@/components/ui/toast";
+import { Receipt } from "lucide-react";
 
 function DashboardLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -84,6 +87,31 @@ function DashboardLayout() {
 }
 
 export default function DashboardPage() {
+  const { user, isDemo, isLoading } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!isLoading && !user && !isDemo) {
+      router.push("/login");
+    }
+  }, [isLoading, user, isDemo, router]);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-[#F4F6F5] flex flex-col items-center justify-center p-4">
+        <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#0B8457] to-[#065F46] flex items-center justify-center text-white animate-pulse shadow-xl shadow-emerald-900/15 mb-4">
+          <Receipt className="w-7 h-7 stroke-[2.2]" />
+        </div>
+        <p className="text-sm font-bold text-slate-800">Chargement de votre espace sécurisé...</p>
+        <p className="text-xs text-slate-400 mt-1">iziFacture • Facturation Pro Afrique</p>
+      </div>
+    );
+  }
+
+  if (!user && !isDemo) {
+    return null;
+  }
+
   return (
     <AppProvider>
       <DashboardLayout />

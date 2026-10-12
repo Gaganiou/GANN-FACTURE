@@ -26,9 +26,13 @@ import {
   AlertCircle,
 } from "lucide-react";
 
+import { useAuth } from "@/context/auth-context";
+
 export default function LandingPage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [billingCycle, setBillingCycle] = useState<"monthly" | "yearly">("monthly");
+  const { user, isDemo, signOut, continueAsDemo } = useAuth();
+  const isAuthenticated = Boolean(user || isDemo);
 
   return (
     <div className="min-h-screen bg-[#F8FAFC] text-slate-900 font-sans selection:bg-[#0B8457] selection:text-white relative overflow-x-hidden">
@@ -91,19 +95,41 @@ export default function LandingPage() {
 
           {/* Desktop CTAs */}
           <div className="hidden md:flex items-center gap-3">
-            <Link
-              href="/dashboard"
-              className="px-4 py-2 text-xs font-bold text-slate-700 hover:text-slate-950 rounded-full hover:bg-slate-100 transition-all"
-            >
-              Se connecter
-            </Link>
-            <Link
-              href="/dashboard"
-              className="flex items-center gap-1.5 px-5 py-2.5 rounded-full bg-[#0B8457] hover:bg-[#086b46] text-white text-xs font-bold shadow-md shadow-emerald-900/15 hover:shadow-lg hover:shadow-emerald-900/20 active:scale-95 transition-all cursor-pointer"
-            >
-              <span>Commencer gratuitement</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </Link>
+            {isAuthenticated ? (
+              <>
+                <Link
+                  href="/dashboard"
+                  className="flex items-center gap-1.5 px-5 py-2.5 rounded-full bg-[#0B8457] hover:bg-[#086b46] text-white text-xs font-bold shadow-md shadow-emerald-900/15 hover:shadow-lg hover:shadow-emerald-900/20 active:scale-95 transition-all cursor-pointer"
+                >
+                  <span>Tableau de bord</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
+                <button
+                  type="button"
+                  onClick={() => signOut()}
+                  className="px-3.5 py-2 text-xs font-bold text-slate-500 hover:text-rose-600 rounded-full hover:bg-rose-50 transition-all cursor-pointer"
+                  title="Se déconnecter"
+                >
+                  Déconnexion
+                </button>
+              </>
+            ) : (
+              <>
+                <Link
+                  href="/login"
+                  className="px-4 py-2 text-xs font-bold text-slate-700 hover:text-slate-950 rounded-full hover:bg-slate-100 transition-all cursor-pointer"
+                >
+                  Se connecter
+                </Link>
+                <Link
+                  href="/signup"
+                  className="flex items-center gap-1.5 px-5 py-2.5 rounded-full bg-[#0B8457] hover:bg-[#086b46] text-white text-xs font-bold shadow-md shadow-emerald-900/15 hover:shadow-lg hover:shadow-emerald-900/20 active:scale-95 transition-all cursor-pointer"
+                >
+                  <span>Commencer gratuitement</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
+              </>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -155,18 +181,44 @@ export default function LandingPage() {
               Témoignages
             </a>
             <div className="pt-2 flex flex-col gap-2">
-              <Link
-                href="/dashboard"
-                className="w-full text-center py-2.5 rounded-full border border-slate-200 text-xs font-bold text-slate-800"
-              >
-                Se connecter
-              </Link>
-              <Link
-                href="/dashboard"
-                className="w-full text-center py-2.5 rounded-full bg-[#0B8457] text-white text-xs font-bold"
-              >
-                Commencer gratuitement
-              </Link>
+              {isAuthenticated ? (
+                <>
+                  <Link
+                    href="/dashboard"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="w-full text-center py-2.5 rounded-full bg-[#0B8457] text-white text-xs font-bold"
+                  >
+                    Tableau de bord →
+                  </Link>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      signOut();
+                    }}
+                    className="w-full text-center py-2 rounded-full border border-rose-200 text-rose-600 text-xs font-bold hover:bg-rose-50"
+                  >
+                    Se déconnecter
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Link
+                    href="/login"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="w-full text-center py-2.5 rounded-full border border-slate-200 text-xs font-bold text-slate-800"
+                  >
+                    Se connecter
+                  </Link>
+                  <Link
+                    href="/signup"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="w-full text-center py-2.5 rounded-full bg-[#0B8457] text-white text-xs font-bold"
+                  >
+                    Commencer gratuitement
+                  </Link>
+                </>
+              )}
             </div>
           </div>
         )}
@@ -198,21 +250,34 @@ export default function LandingPage() {
 
           {/* Action Buttons */}
           <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3.5">
-            <Link
-              href="/dashboard"
-              className="w-full sm:w-auto flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-[#0B8457] hover:bg-[#086b46] text-white text-sm font-bold shadow-xl shadow-emerald-900/20 active:scale-95 transition-all cursor-pointer"
-            >
-              <span>Commencer gratuitement (0 FCFA)</span>
-              <ArrowRight className="w-4 h-4 stroke-[2.5]" />
-            </Link>
+            {isAuthenticated ? (
+              <Link
+                href="/dashboard"
+                className="w-full sm:w-auto flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-[#0B8457] hover:bg-[#086b46] text-white text-sm font-bold shadow-xl shadow-emerald-900/20 active:scale-95 transition-all cursor-pointer"
+              >
+                <span>Accéder à mon tableau de bord</span>
+                <ArrowRight className="w-4 h-4 stroke-[2.5]" />
+              </Link>
+            ) : (
+              <>
+                <Link
+                  href="/signup"
+                  className="w-full sm:w-auto flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-[#0B8457] hover:bg-[#086b46] text-white text-sm font-bold shadow-xl shadow-emerald-900/20 active:scale-95 transition-all cursor-pointer"
+                >
+                  <span>Commencer gratuitement (0 FCFA)</span>
+                  <ArrowRight className="w-4 h-4 stroke-[2.5]" />
+                </Link>
 
-            <Link
-              href="/dashboard"
-              className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-4 rounded-full bg-white hover:bg-slate-50 border border-slate-200/90 text-slate-800 text-sm font-bold shadow-2xs transition-all cursor-pointer"
-            >
-              <Play className="w-4 h-4 text-[#0B8457] fill-[#0B8457]" />
-              <span>Voir la démo en direct</span>
-            </Link>
+                <button
+                  type="button"
+                  onClick={() => continueAsDemo()}
+                  className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-4 rounded-full bg-white hover:bg-slate-50 border border-slate-200/90 text-slate-800 text-sm font-bold shadow-2xs transition-all cursor-pointer"
+                >
+                  <Play className="w-4 h-4 text-[#0B8457] fill-[#0B8457]" />
+                  <span>Voir la démo en direct</span>
+                </button>
+              </>
+            )}
           </div>
 
           {/* Micro social proof under CTAs */}
@@ -702,10 +767,10 @@ export default function LandingPage() {
               </div>
 
               <Link
-                href="/dashboard"
+                href={isAuthenticated ? "/dashboard" : "/signup"}
                 className="w-full text-center py-3.5 rounded-full border border-slate-700 hover:bg-slate-800 text-white text-xs font-bold transition-all"
               >
-                Commencer gratuitement
+                {isAuthenticated ? "Accéder à mon espace" : "Commencer gratuitement"}
               </Link>
             </div>
 
@@ -753,10 +818,10 @@ export default function LandingPage() {
               </div>
 
               <Link
-                href="/dashboard"
+                href={isAuthenticated ? "/dashboard" : "/signup"}
                 className="w-full text-center py-4 rounded-full bg-[#0B8457] hover:bg-[#086b46] text-white text-sm font-extrabold shadow-lg shadow-emerald-900/40 active:scale-95 transition-all"
               >
-                Passer au Plan Pro
+                {isAuthenticated ? "Accéder à mon espace Pro" : "Passer au Plan Pro"}
               </Link>
             </div>
 
@@ -792,10 +857,10 @@ export default function LandingPage() {
               </div>
 
               <Link
-                href="/dashboard"
+                href={isAuthenticated ? "/dashboard" : "/signup"}
                 className="w-full text-center py-3.5 rounded-full border border-slate-700 hover:bg-slate-800 text-white text-xs font-bold transition-all"
               >
-                Contacter l'équipe
+                {isAuthenticated ? "Accéder à mon espace" : "Contacter l'équipe"}
               </Link>
             </div>
           </div>
@@ -816,10 +881,10 @@ export default function LandingPage() {
             </p>
             <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-3">
               <Link
-                href="/dashboard"
+                href={isAuthenticated ? "/dashboard" : "/signup"}
                 className="w-full sm:w-auto px-8 py-4 rounded-full bg-white hover:bg-slate-100 text-slate-950 text-sm font-bold shadow-xl active:scale-95 transition-all cursor-pointer"
               >
-                Commencer gratuitement dès aujourd'hui
+                {isAuthenticated ? "Accéder au Tableau de bord →" : "Commencer gratuitement dès aujourd'hui"}
               </Link>
             </div>
           </div>
@@ -856,9 +921,17 @@ export default function LandingPage() {
             <a href="#tarifs" className="hover:text-[#0B8457]">
               Tarifs
             </a>
-            <Link href="/dashboard" className="hover:text-[#0B8457]">
-              Espace Application
+            <Link
+              href={isAuthenticated ? "/dashboard" : "/login"}
+              className="hover:text-[#0B8457]"
+            >
+              {isAuthenticated ? "Tableau de bord" : "Connexion"}
             </Link>
+            {!isAuthenticated && (
+              <Link href="/signup" className="hover:text-[#0B8457]">
+                Créer un compte
+              </Link>
+            )}
             <a href="mailto:contact@izifacture.com" className="hover:text-[#0B8457]">
               Contact
             </a>

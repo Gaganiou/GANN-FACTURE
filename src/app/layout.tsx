@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { AuthProvider } from "@/context/auth-context";
 
 export const metadata: Metadata = {
-  title: "GANN FACTURE — SaaS de facturation pour entrepreneurs africains",
+  title: "iziFacture — SaaS de facturation pour entrepreneurs africains",
   description:
-    "Gérez vos factures, devis, clients et encaissements en FCFA en toute simplicité.",
+    "Créez des factures professionnelles, gérez vos clients et suivez vos encaissements Wave, Orange Money et virements en FCFA.",
 };
 
 export default function RootLayout({
@@ -15,7 +16,7 @@ export default function RootLayout({
   return (
     <html lang="fr">
       <body className="bg-[#F4F6F5] min-h-screen text-slate-900 antialiased selection:bg-[#E8F5EE] selection:text-[#0B8457]">
-        {children}
+        <AuthProvider>{children}</AuthProvider>
       </body>
     </html>
   );
